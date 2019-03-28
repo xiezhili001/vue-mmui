@@ -1,18 +1,20 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div class="zl-homepage">
+    <div><span>dsf</span><span class="fr">sdf</span></div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
 
 export default {
-  name: "home",
-  components: {
-    HelloWorld
-  }
+  name: "homepage",
+
 };
 </script>
+
+<style lang="scss">
+@import '../static/hot.scss';
+  .zl-homepage {
+    background: pink;
+  }
+</style>

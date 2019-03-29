@@ -9,5 +9,7 @@
 @import "./static/reset.scss";
 #app {
   font-size: px2rem(16);
+  box-sizing: border-box;
+  height: 100%
 }
 </style>

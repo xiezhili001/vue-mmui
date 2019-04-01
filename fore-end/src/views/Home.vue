@@ -104,7 +104,7 @@
       <div>
         单注金额:
         <input type="text" placeholder="0" v-model="singlePrice">
-        <span class="fr" style="padding-top:1px;padding-right:1px">元</span>
+        <span class="fr yuan">元</span>
       </div>
       <div @click="showOrder">确认</div>
       <div class="allMoney" v-show="allMoneySwitch">{{ selectedData.length }}注 共{{ allMoney }}元</div>
@@ -160,12 +160,9 @@ export default {
       selected: "1",
       menuData: [
         { name: "gamblingRecord", data: "博彩记录" },
-        { name: "prizeHistory", data: "两周报表" },
+        { name: "twoWeekReport", data: "两周报表" },
         { name: "prizeHistory", data: "开奖历史" },
-        { name: "prizeHistory", data: "两面长龙" },
-        { name: "prizeHistory", data: "遗漏排行" },
-        { name: "prizeHistory", data: "路珠走势" },
-        { name: "prizeHistory", data: "玩法说明" }
+        { name: "regular", data: "玩法说明" }
       ],
       prise: [
         { color: "rgb(75, 221, 221)" },
@@ -740,6 +737,7 @@ export default {
         width: 40%;
         text-align: right;
         top: 0;
+        line-height: px2rem(100);
         color: #fff;
         right: px2rem(17);
         height: 100%;
@@ -747,6 +745,10 @@ export default {
         background: #eb984e;
         border: 0;
         outline: none;
+      }
+      .yuan {
+        display: inline-block;
+        line-height: px2rem(53)
       }
     }
     & div:nth-child(4) {

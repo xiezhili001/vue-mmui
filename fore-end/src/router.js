@@ -33,6 +33,16 @@ export default new Router({
       component: () => import("./views/Login.vue")
     },
     {
+      path: "/twoWeekReport",
+      name: "twoWeekReport",
+      component: () => import("./views/TwoWeekReport.vue")
+    },
+    {
+      path: "/regular",
+      name: "regular",
+      component: () => import("./views/Regular.vue")
+    },
+    {
       path: '*',
       redirect: '/homepage'
     }

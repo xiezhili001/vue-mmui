@@ -1,8 +1,8 @@
 module.exports = {
   // 基本路径
-  publicPath: process.env.NODE_ENV === 'production'
-    ? '/'
-    : '/',
+  publicPath: process.env.NODE_ENV === 'production' ?
+    '/' :
+    '/',
   // 输出文件目录
   outputDir: 'dist', // 默认dist
   // 用于嵌套生成的静态资产（js,css,img,fonts）目录
@@ -20,26 +20,7 @@ module.exports = {
   transpileDependencies: [],
   // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   productionSourceMap: false,
-  // 如果这个值是一个对象，则会通过 webpack-merge 合并到最终的配置中。如果这个值是一个函数，则会接收被解析的配置作为参数。该函数及可以修改配置并不返回任何东西，也可以返回一个被克隆或合并过的配置版本。
-  // configureWebpack: config => {
-  //   if (process.env.NODE_ENV === 'production') {
-  //     // 为生产环境修改配置...
-  //   } else {
-  //     // 为开发环境修改配置...
-  //   }
-  // },
-  // // 是一个函数，会接收一个基于 webpack-chain 的 ChainableConfig 实例。允许对内部的 webpack 配置进行更细粒度的修改。
-  // chainWebpack: config => {
-  //   /*config.module
-  //     .rule('images')
-  //     .use('url-loader')
-  //       .loader('url-loader')
-  //       .tap(options => {
-  //         // 修改它的选项...
-  //         return options
-  //       })*/
-  // },
-  // css相关配置
+
   css: {
     // 启用 CSS modules
     modules: false,
@@ -58,17 +39,17 @@ module.exports = {
     open: true, //配置自动启动浏览器
     // proxy: 'http://localhost:4000' // 配置跨域处理,只有一个代理
     proxy: {
-        '/api': {
-            target: 'http://cp.che.ba',
-            ws: true,
-            changeOrigin: true
-        }
-    },  // 配置多个代理
-},
+      '/api': {
+        target: 'http://cp.che.ba',
+        ws: true,
+        changeOrigin: true
+      }
+    }, // 配置多个代理
+  },
   // PWA 插件相关配置
   pwa: {},
   // 第三方插件配置
   pluginOptions: {
-  // ...
+    // ...
   }
 }

@@ -3,7 +3,11 @@
     <router-view/>
   </div>
 </template>
-
+<script>
+export default {
+  name: 'app'
+}
+</script>
 <style lang="scss">
 @import "./static/hot.scss";
 @import "./static/reset.scss";

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from '../static/axios.js'
 import { Toast } from "mint-ui";
 export default {
   name: "App",
@@ -37,9 +37,9 @@ export default {
             }
           })
           .then(function(response) {
-            if (response.data.Errcode == 0) {
-              console.log(response.data.Message);
-              localStorage.setItem("token", response.data.Message);
+            if (response.Errcode == 0) {
+              console.log(response.Message);
+              localStorage.setItem("token", response.Message);
               console.log(response);
               if (that.returnPath) {
                 location.href = that.returnPath;
@@ -48,7 +48,7 @@ export default {
               }
             } else {
               console.log(response);
-              Toast(response.data.Message);
+              Toast(response.Message);
             }
           })
           .catch(function(error) {

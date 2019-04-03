@@ -186,8 +186,8 @@ export default {
       LeftSecond: "",
       balance: "",
       mesHeader3: [],
-      freeze:[],
-      hours: ''
+      freeze: [],
+      hours: "00"
     };
   },
   computed: {
@@ -262,16 +262,19 @@ export default {
       var LeftSecond = this.LeftSecond;
       if (LeftSecond >= 0) {
         that.stopSwitch = false;
-        that.hours = that.num(parseInt(LeftSecond / 3600))
+        that.hours = that.num(parseInt(LeftSecond / 3600));
         that.minutes = that.num(parseInt((LeftSecond % 3600) / 60));
         that.seconds = that.num(LeftSecond % 60);
-      } else if (LeftSecond <= -30) {
+      } else if (LeftSecond <= -30 && LeftSecond >= -33) {
         that.stopSwitch = false;
+        that.seconds = '00';
         that.getData();
-      } else {
+      } else if(LeftSecond <= 0 && LeftSecond >= -30) {
         that.stopSwitch = true;
         LeftSecond += 30;
         that.seconds = that.num(LeftSecond);
+      }else {
+        return
       }
     },
     // 获取数据
@@ -291,7 +294,7 @@ export default {
             });
             that.LeftSecond = data.LeftSecond;
           } else {
-            Toast(response.Data.Message);
+            Toast(response.Message);
           }
         })
         .catch(function(error) {
@@ -312,7 +315,7 @@ export default {
             that.freeze = response.Data.freeze;
             console.log(response);
           } else {
-            Toast(response.Data.Message);
+            Toast(response.Message);
           }
         })
         .catch(function(error) {
@@ -333,7 +336,7 @@ export default {
             that.mesHeader2 = response.Data.mesHeader2;
             that.mesHeader3 = response.Data.mesHeader3;
           } else {
-            Toast(response.Data.Message);
+            Toast(response.Message);
           }
         })
         .catch(function(error) {
@@ -341,16 +344,16 @@ export default {
         });
     },
     confirm() {
-      if(this.balance < this.allMoney) {
-        Toast('余额不足');
-        return
+      if (this.balance < this.allMoney) {
+        Toast("余额不足");
+        return;
       }
       var that = this;
       var data = this.selectedObj.map(function(item) {
         item.bet = that.singlePrice;
         delete item.data;
-        return item
-      })
+        return item;
+      });
       axios
         .get("/api/pk10/bet", {
           params: {
@@ -361,13 +364,13 @@ export default {
         .then(function(response) {
           console.log(response);
           if (response.Errcode == 0) {
-            Toast('交易成功');
+            Toast("交易成功");
             that.reset();
             that.orderSwitch = false;
             that.balance = response.Data.balance;
             that.freeze = response.Data.freeze;
           } else {
-            Toast(response.Data.Message);
+            Toast(response.Message);
           }
         })
         .catch(function(error) {
@@ -378,15 +381,15 @@ export default {
   created() {
     this.getMesHeader();
     this.getCurrentMoney();
-    var that = this;
     this.getData();
+  },
+  mounted() {
+    var that = this;
+    // console.log(this.LeftSecond == '');
     var time = window.setInterval(function() {
       that.LeftSecond -= 1;
       that.timer();
     }, 1000);
-  },
-  mounted() {
-    this.timer();
   }
 };
 </script>
@@ -748,7 +751,7 @@ export default {
       }
       .yuan {
         display: inline-block;
-        line-height: px2rem(53)
+        line-height: px2rem(53);
       }
     }
     & div:nth-child(4) {

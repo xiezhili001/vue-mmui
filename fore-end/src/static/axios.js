@@ -6,18 +6,22 @@ import router from '../router';
 const instance = axios.create({
   timeout: 5000,
   baseURL: 'http://cp.che.ba'
+  // baseURL: 'http://192.168.2.9'
 })
 
 // 处理请求拦截
 instance.interceptors.request.use(
   config => {
     // console.log(config);
-    if(localStorage.getItem('token')) {
-    config.params.token = localStorage.getItem('token');
+    if (localStorage.getItem('token')) {
+      config.params.token = localStorage.getItem('token');
     } else {
-       router.push({name: 'login', params:{
-      returnPath: location.href,
-   }});
+      router.push({
+        name: 'login',
+        params: {
+          returnPath: location.href,
+        }
+      });
     }
     // 加上 token
     // let token = sessionStorage.getItem('token');
@@ -37,21 +41,28 @@ instance.interceptors.request.use(
 // 处理响应拦截
 instance.interceptors.response.use(
   response => {
-    console.log(response.data.Errcode);
-    // console.log('请求被服务器发送回来，之后，并且是在.then 之前')
-    if(response.Errcode == 888) {
-      router.push({name: 'login', params:{
-        returnPath: location.href,
-     }});
+    console.log(response)
+    if (response.data.Errcode == 888) {
+      router.push({
+        name: 'login',
+        params: {
+          returnPath: location.href,
+        }
+      });
     }
     return response.data
   },
 
   error => {
-    router.push({name: 'login', params:{
-      returnPath: location.href,
-   }});
-    console.log(error);
+    if (error.response.data.Errcode == 888) {
+      router.push({
+        name: 'login',
+        params: {
+          returnPath: location.href,
+        }
+      });
+    }
+
     // console.log('请求响应回来的时候报错了');
     // console.log(location.href);
 

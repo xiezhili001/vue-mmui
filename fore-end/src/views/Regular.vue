@@ -103,19 +103,19 @@
             <div style="font-size: 12px; color: rgb(153, 153, 153); margin-bottom: 10px;">1～5龙虎</div>
             <div
               style="font-size: 12px; color: rgb(153, 153, 153); margin-bottom: 10px;"
-            >冠 军 龙/虎：“第一名”车号大于“第十名”车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</div>
+            >冠 军 龙/虎：“第一名”车号大于“第十名”<span style="color: #26a2ff">(1vs10)</span>车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</div>
             <div
               style="font-size: 12px; color: rgb(153, 153, 153); margin-bottom: 10px;"
-            >亚 军 龙/虎：“第二名”车号大于“第九名”车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</div>
+            >亚 军 龙/虎：“第二名”车号大于“第九名”<span style="color: #26a2ff">(2vs9)</span>车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</div>
             <div
               style="font-size: 12px; color: rgb(153, 153, 153); margin-bottom: 10px;"
-            >第三名 龙/虎：“第三名”车号大于“第八名”车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</div>
+            >第三名 龙/虎：“第三名”车号大于“第八名”<span style="color: #26a2ff">(3vs8)</span>车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</div>
             <div
               style="font-size: 12px; color: rgb(153, 153, 153); margin-bottom: 10px;"
-            >第四名 龙/虎：“第四名”车号大于“第七名”车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</div>
+            >第四名 龙/虎：“第四名”车号大于“第七名”<span style="color: #26a2ff">(4vs7)</span>车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</div>
             <div
               style="font-size: 12px; color: rgb(153, 153, 153); margin-bottom: 10px;"
-            >第五名 龙/虎：“第五名”车号大于“第六名”车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</div>
+            >第五名 龙/虎：“第五名”车号大于“第六名”<span style="color: #26a2ff">(5vs6)</span>车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</div>
             <div
               style="font-size: 12px; color: rgb(153, 153, 153); margin-bottom: 10px;"
             >冠军车号＋亚军车号＝冠亚和值（为3~19)</div>

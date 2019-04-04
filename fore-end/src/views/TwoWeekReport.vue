@@ -14,7 +14,7 @@
     </div>
     <div class="main">
       <div>
-        <span>2019-03-27 00:00:00</span>
+        <span>2019-03-27至2019-04-210</span>
         <span>543</span>
         <span>45</span>
         <span>453</span>
@@ -47,10 +47,10 @@ export default {
     color: rgb(102, 102, 102);
     font-size: px2rem(14);
     span {
-      width: 20%;
+      width: 15%;
     }
     span:first-child {
-      width: 40%;
+      width: 55%;
     }
   }
   .main {
@@ -66,10 +66,10 @@ export default {
       font-size: px2rem(13);
       border-bottom: px2rem(1) solid #DCDCDC;
       span {
-        width: 20%;
+        width: 15%;
       }
       span:first-child {
-        width: 40%;
+        width: 55%;
       }
     }
   }

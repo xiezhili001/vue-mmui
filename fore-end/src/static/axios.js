@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import router from '../router';
+import { Toast } from "mint-ui";
 
 // 创建一个 axios 的实例
 const instance = axios.create({
@@ -49,6 +50,8 @@ instance.interceptors.response.use(
           returnPath: location.href,
         }
       });
+
+
     }
     return response.data
   },
@@ -61,6 +64,10 @@ instance.interceptors.response.use(
           returnPath: location.href,
         }
       });
+      Toast({
+        message: "登录过期，请重新登录",
+        duration: 1000
+      })
     }
 
     // console.log('请求响应回来的时候报错了');

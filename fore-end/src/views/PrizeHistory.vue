@@ -1,8 +1,14 @@
 <template>
   <div class="zl-prizeHistory">
-    <mt-datetime-picker ref="picker" type="date" v-model="pickerValue" @confirm="handleConfirm"  year-format="{value} 年"
-  month-format="{value} 月"
-  date-format="{value} 日"></mt-datetime-picker>
+    <mt-datetime-picker
+      ref="picker"
+      type="date"
+      v-model="pickerValue"
+      @confirm="handleConfirm"
+      year-format="{value} 年"
+      month-format="{value} 月"
+      date-format="{value} 日"
+    ></mt-datetime-picker>
     <mt-header title="开奖结果">
       <router-link to="/homepage" slot="left">
         <mt-button icon="back">后退</mt-button>
@@ -17,48 +23,48 @@
     </div>
     <div class="main2">
       <div>期数</div>
-      <div>开出号码</div>
+      <div>开奖号码</div>
     </div>
 
     <div class="content">
-
       <div class="main3" v-for="(item1,index1) in listData" :key="index1">
-      <div>
-        <div>{{item1.period}}</div>
-        <div>{{item1.time}}</div>
-      </div>
-      <div >
         <div>
-          <span style="background: rgb(75, 221, 221)">{{item1.records[0]}}</span>
-          <span style="background: rgb(234, 29, 29)">{{item1.records[1]}}</span>
-          <span style="background: rgb(92, 42, 42)">{{item1.records[2]}}</span>
-          <span style="background: rgb(37, 150, 255)">{{item1.records[3]}}</span>
-          <span style="background: rgb(0, 197, 0)">{{item1.records[4]}}</span>
-          <span style="background: rgb(254, 137, 42)">{{item1.records[5]}}</span>
-          <span style="background: rgb(253, 225, 40)">{{item1.records[6]}}</span>
-          <span style="background: rgb(176, 174, 174)">{{item1.records[7]}}</span>
-          <span style="background: rgb(64, 24, 255)">{{item1.records[8]}}</span>
-          <span style="background: rgb(107, 107, 107)">{{item1.records[9]}}</span>
+          <div>{{item1.period}}</div>
+          <div>{{item1.time}}</div>
         </div>
         <div>
-          <span v-for="(item, index) in item1.a" :key="index">{{item}}</span>
-        </div>
-        <div>
-          <span v-for="(item, index) in item1.b" :key="index">{{item}}</span>
+          <div>
+            <span style="background: rgb(75, 221, 221)">{{item1.records[0]}}</span>
+            <span style="background: rgb(234, 29, 29)">{{item1.records[1]}}</span>
+            <span style="background: rgb(92, 42, 42)">{{item1.records[2]}}</span>
+            <span style="background: rgb(37, 150, 255)">{{item1.records[3]}}</span>
+            <span style="background: rgb(0, 197, 0)">{{item1.records[4]}}</span>
+            <span style="background: rgb(254, 137, 42)">{{item1.records[5]}}</span>
+            <span style="background: rgb(253, 225, 40)">{{item1.records[6]}}</span>
+            <span style="background: rgb(176, 174, 174)">{{item1.records[7]}}</span>
+            <span style="background: rgb(64, 24, 255)">{{item1.records[8]}}</span>
+            <span style="background: rgb(107, 107, 107)">{{item1.records[9]}}</span>
+          </div>
+          <div>
+            <span v-for="(item, index) in item1.a" :key="index">
+              {{item}}
+              <i class="tishi" style="position: absolute; z-index: 2">{{item1.c[index]}}</i>
+            </span>
+          </div>
+          <div>
+            <span v-for="(item, index) in item1.b" :key="index">
+              {{item}}
+              <i class="tishi" style="position: absolute; z-index: 2">{{item1.d[index]}}</i>
+            </span>
+          </div>
         </div>
       </div>
     </div>
-
-    </div>
-
-
-
-
   </div>
 </template>
 
 <script>
-import axios from '../static/axios.js';
+import axios from "../static/axios.js";
 import Vue from "vue";
 import { DatetimePicker } from "mint-ui";
 Vue.component(DatetimePicker.name, DatetimePicker);
@@ -111,50 +117,52 @@ export default {
           if (response.Errcode == 0) {
             that.listData = response.Data.map(function(item) {
               item.a = [];
-              if(item.records[0]>item.records[9]) {
-                item.a.push('龙');
+              item.c= ['1v10','2v9','3v8','4v7','5v6']
+              if (item.records[0] > item.records[9]) {
+                item.a.push("龙");
               } else {
-                item.a.push('虎');
+                item.a.push("虎");
               }
-               if(item.records[1]>item.records[8]) {
-                item.a.push('龙');
+              if (item.records[1] > item.records[8]) {
+                item.a.push("龙");
               } else {
-                item.a.push('虎');
+                item.a.push("虎");
               }
-               if(item.records[2]>item.records[7]) {
-                item.a.push('龙');
+              if (item.records[2] > item.records[7]) {
+                item.a.push("龙");
               } else {
-                item.a.push('虎');
+                item.a.push("虎");
               }
-               if(item.records[3]>item.records[6]) {
-                item.a.push('龙');
+              if (item.records[3] > item.records[6]) {
+                item.a.push("龙");
               } else {
-                item.a.push('虎');
+                item.a.push("虎");
               }
-               if(item.records[4]>item.records[5]) {
-                item.a.push('龙');
+              if (item.records[4] > item.records[5]) {
+                item.a.push("龙");
               } else {
-                item.a.push('虎');
+                item.a.push("虎");
               }
               item.b = [];
-              var c = item.records[0]+item.records[1];
+              item.d = ['冠亚和','冠亚大小','冠亚单双']
+              var c = item.records[0] + item.records[1];
               item.b.push(c);
-              if(c<11) {
-                item.b.push('小');
-              }else if(c == 11){
-                item.b.push('和');
-              }else{
-                item.b.push('大');
-              }
-              if(c==11) {
-                item.b.push('和');
-              } else if(c%2 == 0) {
-                item.b.push('双');
+              if (c < 11) {
+                item.b.push("小");
+              } else if (c == 11) {
+                item.b.push("和");
               } else {
-                item.b.push('单');
+                item.b.push("大");
               }
-              return item
-            })
+              if (c == 11) {
+                item.b.push("和");
+              } else if (c % 2 == 0) {
+                item.b.push("双");
+              } else {
+                item.b.push("单");
+              }
+              return item;
+            });
             console.log(that.listData);
           } else {
             Toast(response.Message);
@@ -232,6 +240,13 @@ export default {
           background-color: rgb(255, 255, 255);
           align-items: center;
           border-radius: px2rem(4);
+          position: relative;
+          .tishi {
+            display: inline-block;
+            left: 0;
+            bottom: px2rem(-10);
+            font-size: px2rem(10);
+          }
         }
       }
       div:nth-child(3) {
@@ -243,12 +258,34 @@ export default {
           height: px2rem(30);
           color: rgb(102, 102, 102);
           box-shadow: lightgray 0px 1px 2px;
-          margin: px2rem(1);
+          margin: px2rem(1) px2rem(5);
           font-size: px2rem(12);
           padding: px2rem(4) px2rem(8);
           background-color: rgb(255, 255, 255);
           align-items: center;
           border-radius: px2rem(4);
+          position: relative;
+        }
+        span:first-child .tishi {
+          display: inline-block;
+          left: px2rem(-40);
+          bottom: px2rem(-9);
+          font-size: px2rem(10);
+          width: px2rem(60);
+        }
+        span:nth-child(2) .tishi {
+          display: inline-block;
+          left: px2rem(-13);
+          bottom: px2rem(-9);
+          font-size: px2rem(10);
+          width: px2rem(60);
+        }
+        span:nth-child(3) .tishi {
+          display: inline-block;
+          left: px2rem(10);
+          bottom: px2rem(-9);
+          font-size: px2rem(10);
+          width: px2rem(60);
         }
       }
     }

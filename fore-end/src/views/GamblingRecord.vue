@@ -1,6 +1,6 @@
 <template>
   <div class="zl-gamblingRecord">
-    <mt-header title="购买记录">
+    <mt-header title="投注记录">
       <router-link to="/homepage" slot="left">
         <mt-button icon="back">后退</mt-button>
       </router-link>

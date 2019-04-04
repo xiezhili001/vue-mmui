@@ -40,6 +40,7 @@ export default {
             if (response.Errcode == 0) {
               console.log(response.Message);
               localStorage.setItem("token", response.Message);
+              localStorage.setItem("username", response.Data);
               console.log(response);
               if (that.returnPath) {
                 location.href = that.returnPath;

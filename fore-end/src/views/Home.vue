@@ -1,15 +1,57 @@
 <template>
-  <div class="zl-homepage">
+  <div class="zl-homepage" @click="quiuuijm">
+    <div class="order" v-show="orderSwitch">
+      <div>
+        <div class="orderHeader">
+          <span>号码</span>
+          <span>赔率</span>
+          <span>金额</span>
+        </div>
+        <div class="orderList">
+          <ul>
+            <li v-for="(item,index) in selectedObj" :key="index">
+              <span>{{ item.id }}</span>
+              <span>{{ item.odds }}</span>
+              <span>{{ singlePrice }}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="orderMoney">
+          <span>总计{{ selectedData.length }}注</span>
+          <span class="fr">{{ allMoney }}元</span>
+        </div>
+        <div class="orderconfim">
+          <mt-button type="default" @click="hideOrder">取消</mt-button>
+          <mt-button type="primary" @click="confirm" class="fr">确认</mt-button>
+        </div>
+      </div>
+    </div>
+    <div class="qiuu" v-show="qiuuSwitch">
+      <div v-for="(item,index) in qiuuList" :key="index">
+        {{item.period}}期开奖结果
+        <span style="background: rgb(75, 221, 221);">{{item.records[0]}}</span>
+        <span style="background: rgb(234, 29, 29);">{{item.records[1]}}</span>
+        <span style="background: rgb(92, 42, 42);">{{item.records[2]}}</span>
+        <span style="background: rgb(37, 150, 255);">{{item.records[3]}}</span>
+        <span style="background: rgb(0, 197, 0);">{{item.records[4]}}</span>
+        <span style="background: rgb(254, 137, 42);">{{item.records[5]}}</span>
+        <span style="background: rgb(253, 225, 40);">{{item.records[6]}}</span>
+        <span style="background: rgb(176, 174, 174);">{{item.records[7]}}</span>
+        <span style="background: rgb(64, 24, 255);">{{item.records[8]}}</span>
+        <span style="background: rgb(107, 107, 107);">{{item.records[9]}}</span>
+      </div>
+    </div>
     <div class="stop" v-show="stopSwitch">
       <div>距开奖 00:{{minutes}}:{{seconds}}</div>
     </div>
+
     <div class="menu" v-show="menuSwitch" @click="showMenu">
       <ul>
         <li v-for="(item, index) in menuData" :key="index" @click="goto(item.name)">{{ item.data }}</li>
       </ul>
     </div>
     <mt-header title>
-      <mt-button icon="back" slot="left">返回</mt-button>
+      <mt-button slot="left">您好：{{username}}</mt-button>
       <mt-button slot="right" class="money">余额￥{{balance - freeze}}</mt-button>
       <mt-button slot="right" @click="showMenu">
         <span class="iconfont iconrenjijiaohu"></span>
@@ -17,8 +59,20 @@
     </mt-header>
 
     <div class="main1">
-      <div class="prize">
-        <div>距{{LastPeriod}}期封盘</div>
+      <div class="prize" @click.stop="showQiuu" style="position: relative">
+        <div style="text-align: left;padding-left:12px">
+          {{LastPeriod}}期开奖结果
+          <span class="iconfont iconxiala1"></span>
+          <audio
+            src="../static/07PlayerWin_OpenCardChip.mp3"
+            controls="controls"
+            preload
+            id="music1"
+            hidden
+          ></audio>
+          <span class="iconfont iconlaba" @click.stop="playAudio"></span>
+        </div>
+
         <div>
           <span
             v-for="(item, index) in prise"
@@ -29,7 +83,10 @@
       </div>
       <div class="countdown">
         <div>距{{LastPeriod+1}}期封盘</div>
-        <div class="lastTime">{{hours}}:{{minutes}}:{{seconds}}</div>
+        <div
+          :class="['lastTime', 'animated', animate, 'infinite']"
+          v-show="timeSwitch"
+        >{{hours}}:{{minutes}}:{{seconds}}</div>
       </div>
     </div>
 
@@ -37,6 +94,7 @@
       <mt-tab-item id="1">冠军</mt-tab-item>
       <mt-tab-item id="2">两面</mt-tab-item>
       <mt-tab-item id="3">冠亚和</mt-tab-item>
+      <mt-tab-item id="4">官方</mt-tab-item>
     </mt-navbar>
 
     <mt-tab-container v-model="selected">
@@ -90,8 +148,52 @@
             >
               <span
                 :class="['selectedData',selectedData.includes(item.id) ? 'active' : '']"
-              >{{ item.data }}</span>
-              <span>{{ item.odds }}</span>
+                v-html="item.data"
+              >{{item.data}}</span>
+              <span>{{ item.odds}}</span>
+            </div>
+          </div>
+        </div>
+      </mt-tab-container-item>
+
+      <mt-tab-container-item id="4">
+        <div class="mesHeader1" v-for="item in mesHeader1" :key="item.title" style="height: auto">
+          <div>{{ item.title }}</div>
+          <div>
+            <div class="wode" style="width:16.6%">
+              <span>全</span>
+              <span>9.58</span>
+            </div>
+            <div class="wode" style="width:16.6%">
+              <span>大</span>
+              <span>9.58</span>
+            </div>
+            <div class="wode" style="width:16.6%">
+              <span>小</span>
+              <span>9.58</span>
+            </div>
+            <div class="wode" style="width:16.6%">
+              <span>单</span>
+              <span>9.58</span>
+            </div>
+            <div class="wode" style="width:16.6%">
+              <span>双</span>
+              <span>9.58</span>
+            </div>
+            <div class="wode" style="width:16.6%">
+              <span>清</span>
+              <span>9.58</span>
+            </div>
+            <div
+              class="everylist"
+              v-for="items in item.data"
+              :key="items.id"
+              @click="selectOptions(items.id,items.data,items.odds)"
+            >
+              <span
+                :class="['selectedData',selectedData.includes(items.id) ? 'active' : '']"
+              >{{items.data}}</span>
+              <span>{{items.odds}}</span>
             </div>
           </div>
         </div>
@@ -112,33 +214,6 @@
         <span v-for="(item,index) in quickMoney" :key="index" @click="setMoney(item)">{{item}}</span>
       </div>
     </footer>
-
-    <div class="order" v-show="orderSwitch">
-      <div>
-        <div class="orderHeader">
-          <span>号码</span>
-          <span>赔率</span>
-          <span>金额</span>
-        </div>
-        <div class="orderList">
-          <ul>
-            <li v-for="(item,index) in selectedObj" :key="index">
-              <span>{{ item.id }}</span>
-              <span>{{ item.odds }}</span>
-              <span>{{ singlePrice }}</span>
-            </li>
-          </ul>
-        </div>
-        <div class="orderMoney">
-          <span>总计{{ selectedData.length }}注</span>
-          <span class="fr">{{ allMoney }}元</span>
-        </div>
-        <div class="orderconfim">
-          <mt-button type="default" @click="hideOrder">取消</mt-button>
-          <mt-button type="primary" @click="confirm" class="fr">确认</mt-button>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -149,6 +224,10 @@ export default {
   name: "homepage",
   data() {
     return {
+      animate: "",
+      timeSwitch: false,
+      qiuuSwitch: false,
+      username: "",
       quickMoney: [5, 50, 100, 200, 500, 1000],
       quickMoneySwitch: false,
       allMoneySwitch: false,
@@ -159,10 +238,11 @@ export default {
       orderSwitch: false,
       selected: "1",
       menuData: [
-        { name: "gamblingRecord", data: "博彩记录" },
+        { name: "gamblingRecord", data: "投注记录" },
         { name: "twoWeekReport", data: "两周报表" },
         { name: "prizeHistory", data: "开奖历史" },
-        { name: "regular", data: "玩法说明" }
+        { name: "regular", data: "玩法说明" },
+        { name: "login", data: "退出登录" }
       ],
       prise: [
         { color: "rgb(75, 221, 221)" },
@@ -187,7 +267,8 @@ export default {
       balance: "",
       mesHeader3: [],
       freeze: [],
-      hours: "00"
+      hours: "00",
+      qiuuList: []
     };
   },
   computed: {
@@ -195,7 +276,41 @@ export default {
       return this.selectedData.length * this.singlePrice;
     }
   },
+  watch: {
+    singlePrice(val) {
+      if (isNaN(parseInt(val)) && val != "") {
+        Toast({
+          message: "请输入正确的数字",
+          duration: 1000
+        });
+        this.singlePrice = "";
+      } else if (val == "") {
+        return;
+      } else if (parseInt(val) > 10000) {
+        this.singlePrice = 10000;
+      } else {
+        this.singlePrice = parseInt(val);
+      }
+    }
+  },
   methods: {
+    quiuuijm() {
+      this.qiuuSwitch = false;
+    },
+    playAudio() {
+      var audio = document.getElementById("music1");
+      console.log(audio);
+      if (audio !== null) {
+        //检测播放是否已暂停.audio.paused 在播放器播放时返回false.
+        alert(audio.paused);
+        if (audio.paused) {
+          // audio.paused=false;
+          audio.play(); //audio.play();// 这个就是播放
+        } else {
+          audio.pause(); // 这个就是暂停
+        }
+      }
+    },
     setMoney(price) {
       this.quickMoneySwitch = false;
       this.singlePrice = price;
@@ -203,7 +318,13 @@ export default {
     showQuickMoney() {
       this.quickMoneySwitch = !this.quickMoneySwitch;
     },
+    showQiuu() {
+      this.qiuuSwitch = !this.qiuuSwitch;
+    },
     goto(name) {
+      if (name == "login") {
+        localStorage.removeItem("token");
+      }
       this.$router.push({ name: name });
     },
     showMenu() {
@@ -261,20 +382,48 @@ export default {
       var that = this;
       var LeftSecond = this.LeftSecond;
       if (LeftSecond >= 0) {
+        // if (LeftSecond == 1) {
+        //   var audio = document.getElementById("music1");
+        //   if (audio !== null) {
+        //     //检测播放是否已暂停.audio.paused 在播放器播放时返回false.
+        //     alert(audio.paused);
+        //     if (audio.paused) {
+        //       audio.play(); //audio.play();// 这个就是播放
+        //     } else {
+        //       audio.pause(); // 这个就是暂停
+        //     }
+        //   }
+        // }
+        if (LeftSecond < 5) {
+          that.animate = "tada";
+        }
         that.stopSwitch = false;
         that.hours = that.num(parseInt(LeftSecond / 3600));
         that.minutes = that.num(parseInt((LeftSecond % 3600) / 60));
         that.seconds = that.num(LeftSecond % 60);
-      } else if (LeftSecond <= -30 && LeftSecond >= -33) {
+      } else if (LeftSecond == -31) {
+        // var audio = document.getElementById("music1");
+        // if (audio !== null) {
+        //   //检测播放是否已暂停.audio.paused 在播放器播放时返回false.
+        //   alert(audio.paused);
+        //   if (audio.paused) {
+        //     audio.play(); //audio.play();// 这个就是播放
+        //   } else {
+        //     audio.pause(); // 这个就是暂停
+        //   }
+        // }
+        that.animate = "";
         that.stopSwitch = false;
-        that.seconds = '00';
+        that.seconds = "00";
         that.getData();
-      } else if(LeftSecond <= 0 && LeftSecond >= -30) {
+      } else if (LeftSecond <= 0 && LeftSecond >= -30) {
+        that.animate = "";
         that.stopSwitch = true;
         LeftSecond += 30;
         that.seconds = that.num(LeftSecond);
-      }else {
-        return
+      } else {
+        that.animate = "";
+        return;
       }
     },
     // 获取数据
@@ -334,6 +483,28 @@ export default {
           if (response.Errcode == 0) {
             that.mesHeader1 = response.Data.mesHeader1;
             that.mesHeader2 = response.Data.mesHeader2;
+            that.mesHeader2 = response.Data.mesHeader2.map(function(
+              item,
+              index
+            ) {
+              if (index == 0) {
+                item.data[4].data = "龙1vs10";
+                item.data[5].data = "虎1vs10";
+              } else if (index == 1) {
+                item.data[4].data = "龙2vs9";
+                item.data[5].data = "虎2vs9";
+              } else if (index == 2) {
+                item.data[4].data = "龙3vs8";
+                item.data[5].data = "虎3vs8";
+              } else if (index == 3) {
+                item.data[4].data = "龙4vs7";
+                item.data[5].data = "虎4vs7";
+              } else if (index == 4) {
+                item.data[4].data = "龙5vs6";
+                item.data[5].data = "虎5vs6";
+              }
+              return item;
+            });
             that.mesHeader3 = response.Data.mesHeader3;
           } else {
             Toast(response.Message);
@@ -367,8 +538,44 @@ export default {
             Toast("交易成功");
             that.reset();
             that.orderSwitch = false;
+            that.singlePrice = "";
             that.balance = response.Data.balance;
             that.freeze = response.Data.freeze;
+          } else {
+            Toast(response.Message);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    getqiuu() {
+      function dateToString(date) {
+        function getDB(num) {
+          return num < 10 ? "0" + num : num;
+        }
+        var dateStr = "";
+        var y = date.getFullYear();
+
+        var m = date.getMonth() + 1;
+        var d = date.getDate();
+        dateStr += y + "-" + getDB(m) + "-" + getDB(d) + "";
+        return dateStr;
+      }
+      var date = new Date();
+      var that = this;
+      axios
+        .get("/api/pk10/History", {
+          params: {
+            date: dateToString(date)
+          }
+        })
+        .then(function(response) {
+          if (response.Errcode == 0) {
+            that.qiuuList = response.Data.filter(function(item, index) {
+              return index < 5;
+            });
+            console.log(that.qiuuList);
           } else {
             Toast(response.Message);
           }
@@ -379,13 +586,21 @@ export default {
     }
   },
   created() {
+    this.getqiuu();
+
     this.getMesHeader();
     this.getCurrentMoney();
     this.getData();
+
+    if (localStorage.getItem("username")) {
+      this.username = localStorage.getItem("username");
+    }
   },
   mounted() {
+    this.timeSwitch = true;
+    this.timer();
+    this.animate = "";
     var that = this;
-    // console.log(this.LeftSecond == '');
     var time = window.setInterval(function() {
       that.LeftSecond -= 1;
       that.timer();
@@ -397,9 +612,92 @@ export default {
 <style lang="scss">
 @import "../static/hot.scss";
 .zl-homepage {
+  .wode {
+    height: px2rem(73);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    padding-top: px2rem(8);
+    span:first-child {
+      display: inline-block;
+      height: 1.8rem;
+      line-height: 1.8rem;
+      width: 1.8rem;
+      color: #000;
+      -webkit-box-shadow: lightgrey 0px 0.08533rem 0.08533rem;
+      box-shadow: lightgrey 0px 0.08533rem 0.08533rem;
+      font-size: 0.93867rem;
+      background-color: white;
+      margin: 0 auto;
+    }
+    span:last-child {
+      margin-top: 0.21333rem;
+      font-size: 0.59733rem;
+      color: #c0392b;
+    }
+  }
+  .qiuu {
+    position: absolute;
+    margin-top: px2rem(114);
+    width: 100%;
+    height: px2rem(120);
+    z-index: 2;
+    background: #ccc;
+    div {
+      padding-left: px2rem(7);
+      span {
+        display: inline-block;
+        color: #fff;
+        line-height: 0.896rem;
+        display: inline-block;
+        position: relative;
+        width: px2rem(18);
+        text-align: center;
+        height: 0.85333rem;
+        border-radius: 50%;
+        background: red;
+        font-size: 0.42667rem;
+      }
+      span:first-child {
+        margin-left: px2rem(25);
+      }
+    }
+  }
+  .priceNumber {
+    flex-direction: row !important;
+  }
+  .priceNumber span {
+    color: #fff;
+    line-height: px2rem(21);
+    display: inline-block;
+    position: relative;
+    width: 10%;
+    height: px2rem(20);
+    border-radius: 50%;
+    background: red;
+    font-size: px2rem(10);
+  }
+  .iconfont {
+    font-size: px2rem(17);
+  }
+  .prize {
+    position: relative;
+  }
+  .iconxiala1:before {
+    position: absolute;
+    top: px2rem(17);
+    right: px2rem(80);
+  }
+  .iconlaba:before {
+    position: absolute;
+    top: px2rem(5);
+    right: px2rem(8);
+    font-size: px2rem(10);
+  }
+
   .stop {
     position: absolute;
-    z-index: 2;
+    z-index: 3;
     margin-top: px2rem(40);
     width: 100%;
     height: 100%;
@@ -423,7 +721,7 @@ export default {
   }
   .menu {
     position: absolute;
-    z-index: 3;
+    z-index: 4;
     width: 100%;
     height: 100%;
     margin-top: px2rem(40);
@@ -447,6 +745,7 @@ export default {
   }
   .order {
     position: absolute;
+    z-index: 2;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.8);
@@ -629,7 +928,7 @@ export default {
       & > div:first-child {
         padding-top: px2rem(4);
       }
-      & > div:last-child {
+      & > div:nth-child(2) {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -737,10 +1036,10 @@ export default {
       overflow: hidden;
       input {
         position: absolute;
-        width: 40%;
+        width: 30%;
         text-align: right;
         top: 0;
-        line-height: px2rem(100);
+        line-height: px2rem(50);
         color: #fff;
         right: px2rem(17);
         height: 100%;
@@ -755,7 +1054,7 @@ export default {
       }
     }
     & div:nth-child(4) {
-      width: 15%;
+      width: 25%;
       background: rgb(231, 76, 60);
     }
   }

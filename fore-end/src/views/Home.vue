@@ -63,14 +63,10 @@
         <div style="text-align: left;padding-left:12px">
           {{LastPeriod}}期开奖结果
           <span class="iconfont iconxiala1"></span>
-          <audio
-            src="../static/07PlayerWin_OpenCardChip.mp3"
-            controls="controls"
-            preload
-            id="music1"
-            hidden
-          ></audio>
-          <span class="iconfont iconlaba" @click.stop="playAudio"></span>
+          <audio id="music1">
+            <source src="../static/07PlayerWin_OpenCardChip.mp3">
+          </audio>
+          <span class="iconfont iconlaba" @click.stop="setVoice"></span>
         </div>
 
         <div>
@@ -297,19 +293,19 @@ export default {
     quiuuijm() {
       this.qiuuSwitch = false;
     },
-    playAudio() {
+    setVoice() {
       var audio = document.getElementById("music1");
-      console.log(audio);
-      if (audio !== null) {
-        //检测播放是否已暂停.audio.paused 在播放器播放时返回false.
-        alert(audio.paused);
-        if (audio.paused) {
-          // audio.paused=false;
-          audio.play(); //audio.play();// 这个就是播放
-        } else {
-          audio.pause(); // 这个就是暂停
+        console.log(audio);
+        if (audio !== null) {
+          //检测播放是否已暂停.audio.paused 在播放器播放时返回false.
+          // alert(audio.paused);
+          if (audio.paused) {
+            // audio.paused=false;
+            audio.play(); //audio.play();// 这个就是播放
+          } else {
+            audio.pause(); // 这个就是暂停
+          }
         }
-      }
     },
     setMoney(price) {
       this.quickMoneySwitch = false;

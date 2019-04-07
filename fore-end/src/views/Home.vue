@@ -125,7 +125,8 @@
             >
               <span
                 :class="['selectedData',selectedData.includes(items.id) ? 'active' : '']"
-              >{{items.data}}</span>
+                v-html="items.data"
+              ></span>
               <span>{{items.odds}}</span>
             </div>
           </div>
@@ -484,20 +485,20 @@ export default {
               index
             ) {
               if (index == 0) {
-                item.data[4].data = "龙1vs10";
-                item.data[5].data = "虎1vs10";
+                item.data[4].data = "龙<span class='vsSpan'>1vs10</span>";
+                item.data[5].data = "虎<span class='vsSpan'>1vs10</span>";
               } else if (index == 1) {
-                item.data[4].data = "龙2vs9";
-                item.data[5].data = "虎2vs9";
+                item.data[4].data = "龙<span class='vsSpan'>2vs9</span>";
+                item.data[5].data = "虎<span class='vsSpan'>2vs9</span>";
               } else if (index == 2) {
-                item.data[4].data = "龙3vs8";
-                item.data[5].data = "虎3vs8";
+                item.data[4].data = "龙<span class='vsSpan'>3vs8</span>";
+                item.data[5].data = "虎<span class='vsSpan'>3vs8</span>";
               } else if (index == 3) {
-                item.data[4].data = "龙4vs7";
-                item.data[5].data = "虎4vs7";
+                item.data[4].data = "龙<span class='vsSpan'>4vs7</span>";
+                item.data[5].data = "虎<span class='vsSpan'>4vs7</span>";
               } else if (index == 4) {
-                item.data[4].data = "龙5vs6";
-                item.data[5].data = "虎5vs6";
+                item.data[4].data = "龙<span class='vsSpan'>5vs6</span>";
+                item.data[5].data = "虎<span class='vsSpan'>5vs6</span>";
               }
               return item;
             });
@@ -833,7 +834,7 @@ export default {
           text-align: center;
           flex-direction: column;
           padding-top: px2rem(10);
-          span:first-child {
+          >span:first-child {
             display: inline-block;
             height: px2rem(50);
             line-height: px2rem(50);
@@ -1053,6 +1054,9 @@ export default {
       width: 25%;
       background: rgb(231, 76, 60);
     }
+  }
+  .vsSpan {
+    display: inline;
   }
 }
 </style>

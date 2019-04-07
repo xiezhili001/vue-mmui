@@ -296,17 +296,17 @@ export default {
     },
     setVoice() {
       var audio = document.getElementById("music1");
-        console.log(audio);
-        if (audio !== null) {
-          //检测播放是否已暂停.audio.paused 在播放器播放时返回false.
-          // alert(audio.paused);
-          if (audio.paused) {
-            // audio.paused=false;
-            audio.play(); //audio.play();// 这个就是播放
-          } else {
-            audio.pause(); // 这个就是暂停
-          }
+      console.log(audio);
+      if (audio !== null) {
+        //检测播放是否已暂停.audio.paused 在播放器播放时返回false.
+        // alert(audio.paused);
+        if (audio.paused) {
+          // audio.paused=false;
+          audio.play(); //audio.play();// 这个就是播放
+        } else {
+          audio.pause(); // 这个就是暂停
         }
+      }
     },
     setMoney(price) {
       this.quickMoneySwitch = false;
@@ -379,18 +379,9 @@ export default {
       var that = this;
       var LeftSecond = this.LeftSecond;
       if (LeftSecond >= 0) {
-        // if (LeftSecond == 1) {
-        //   var audio = document.getElementById("music1");
-        //   if (audio !== null) {
-        //     //检测播放是否已暂停.audio.paused 在播放器播放时返回false.
-        //     alert(audio.paused);
-        //     if (audio.paused) {
-        //       audio.play(); //audio.play();// 这个就是播放
-        //     } else {
-        //       audio.pause(); // 这个就是暂停
-        //     }
-        //   }
-        // }
+        if (LeftSecond == 0) {
+          this.setVoice();
+        }
         if (LeftSecond < 5) {
           that.animate = "tada";
         }
@@ -399,20 +390,11 @@ export default {
         that.minutes = that.num(parseInt((LeftSecond % 3600) / 60));
         that.seconds = that.num(LeftSecond % 60);
       } else if (LeftSecond == -31) {
-        // var audio = document.getElementById("music1");
-        // if (audio !== null) {
-        //   //检测播放是否已暂停.audio.paused 在播放器播放时返回false.
-        //   alert(audio.paused);
-        //   if (audio.paused) {
-        //     audio.play(); //audio.play();// 这个就是播放
-        //   } else {
-        //     audio.pause(); // 这个就是暂停
-        //   }
-        // }
         that.animate = "";
         that.stopSwitch = false;
         that.seconds = "00";
         that.getData();
+        that.setVoice();
       } else if (LeftSecond <= 0 && LeftSecond >= -30) {
         that.animate = "";
         that.stopSwitch = true;
@@ -834,7 +816,7 @@ export default {
           text-align: center;
           flex-direction: column;
           padding-top: px2rem(10);
-          >span:first-child {
+          > span:first-child {
             display: inline-block;
             height: px2rem(50);
             line-height: px2rem(50);

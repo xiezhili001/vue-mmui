@@ -44,7 +44,7 @@
         </div>
         <div class="orderMoney" id="order4SwitchMoney" style="height: auto;padding-bottom: 5px">
           <div>组合数量： {{mh4Data.validcount}}</div>
-          <div>倍&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数： {{amt}}（单位：元）</div>
+          <div>倍&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数： {{amt}}（单位：{{ctype}}）</div>
           <div>下注金额： {{mh4Data.bet}} 元</div>
           <div>可&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;赢： {{mh4Data.canwin}} 元</div>
         </div>
@@ -443,12 +443,10 @@ export default {
         var arr = this.selectedMesHeader4.filter(function(item) {
           return item.charAt(0) == i;
         });
-        console.log(arr);
         if (arr.length != 0) {
           arr = arr.map(function(item) {
             return Number(item.substr(1, item.length - 1));
           });
-          console.log(arr);
           this.selectedMesHeader4Obj.push({ pos: i, numbers: arr });
         }
       }
@@ -477,14 +475,15 @@ export default {
         }
       })
         .then(function(response) {
+          console.log(response);
           if (response.Errcode == 0) {
             console.log(response);
             that.order4Switch = true;
             that.mh4Data = response.Data;
-            Indicator.close();
           } else {
-            Toast(response.Message);
+            Toast('请输入有效的组合');
           }
+            Indicator.close();
         })
         .catch(function(error) {
           console.log(error);
@@ -573,16 +572,7 @@ export default {
       }
       var audio = document.getElementById("music1");
       console.log(audio);
-      if (audio !== null) {
-        //检测播放是否已暂停.audio.paused 在播放器播放时返回false.
-        // alert(audio.paused);
-        if (audio.paused) {
-          // audio.paused=false;
-          audio.play(); //audio.play();// 这个就是播放
-        } else {
-          audio.pause(); // 这个就是暂停
-        }
-      }
+      audio.play();
     },
     setMoney(price) {
       this.quickMoneySwitch = false;

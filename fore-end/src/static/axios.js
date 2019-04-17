@@ -5,8 +5,8 @@ import { Toast } from "mint-ui";
 
 // 创建一个 axios 的实例
 const instance = axios.create({
-  timeout: 5000,
-  baseURL: 'http://cp.che.ba'
+  timeout: 6000,
+  baseURL: ''
   // baseURL: 'http://192.168.2.9'
 })
 
@@ -14,15 +14,28 @@ const instance = axios.create({
 instance.interceptors.request.use(
   config => {
     // console.log(config);
-    if (localStorage.getItem('token')) {
-      config.params.token = localStorage.getItem('token');
+    if (config.method == 'post') {
+      if (localStorage.getItem('token')) {
+        config.data.token = localStorage.getItem('token');
+      } else {
+        router.push({
+          name: 'login',
+          params: {
+            returnPath: location.href,
+          }
+        });
+      }
     } else {
-      router.push({
-        name: 'login',
-        params: {
-          returnPath: location.href,
-        }
-      });
+      if (localStorage.getItem('token')) {
+        config.params.token = localStorage.getItem('token');
+      } else {
+        router.push({
+          name: 'login',
+          params: {
+            returnPath: location.href,
+          }
+        });
+      }
     }
     // 加上 token
     // let token = sessionStorage.getItem('token');
@@ -42,7 +55,7 @@ instance.interceptors.request.use(
 // 处理响应拦截
 instance.interceptors.response.use(
   response => {
-    console.log(response)
+    // console.log(response)
     if (response.data.Errcode == 888) {
       router.push({
         name: 'login',
@@ -57,6 +70,7 @@ instance.interceptors.response.use(
   },
 
   error => {
+    console.log(error);
     if (error.response.data.Errcode == 888) {
       router.push({
         name: 'login',

@@ -26,6 +26,35 @@
         </div>
       </div>
     </div>
+
+    <div class="order" v-show="order4Switch">
+      <div>
+        <div class="order4SwitchTitle">请确定注单</div>
+        <div class="orderHeader">
+          <span>名次</span>
+          <span style="margin-left: 10%">已选车号</span>
+        </div>
+        <div class="orderList">
+          <ul>
+            <li v-for="item in selectedMesHeader4Obj" :key="item.pos">
+              <span>第{{ item.pos+1 }}名</span>
+              <span style="margin-left: 15%; text-align: left">{{ item.numbers.join(',') }}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="orderMoney" id="order4SwitchMoney" style="height: auto;padding-bottom: 5px">
+          <div>组合数量： {{mh4Data.validcount}}</div>
+          <div>倍&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数： {{amt}}（单位：元）</div>
+          <div>下注金额： {{mh4Data.bet}} 元</div>
+          <div>可&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;赢： {{mh4Data.canwin}} 元</div>
+        </div>
+        <div class="orderconfim">
+          <mt-button type="default" @click="order4Switch=false;">取消</mt-button>
+          <mt-button type="primary" @click="confirm4" class="fr">确认</mt-button>
+        </div>
+      </div>
+    </div>
+
     <div class="qiuu" v-show="qiuuSwitch">
       <div v-for="(item,index) in qiuuList" :key="index">
         {{item.period}}期开奖结果
@@ -66,7 +95,8 @@
           <audio id="music1">
             <source src="../static/07PlayerWin_OpenCardChip.mp3">
           </audio>
-          <span class="iconfont iconlaba" @click.stop="setVoice"></span>
+          <span v-if="voiceSwitch" class="iconfont iconlaba" @click.stop="voiceSwitch=false"></span>
+          <span v-else class="iconfont iconjingyin" @click.stop="voiceSwitch=true"></span>
         </div>
 
         <div>
@@ -154,50 +184,85 @@
       </mt-tab-container-item>
 
       <mt-tab-container-item id="4">
-        <div class="mesHeader1" v-for="item in mesHeader1" :key="item.title" style="height: auto">
-          <div>{{ item.title }}</div>
-          <div>
-            <div class="wode" style="width:16.6%">
-              <span>全</span>
-              <span>9.58</span>
+        <div class="mesHeader4" v-for="item in mesHeader4" :key="item.title" style="height: auto">
+          <div class="mesHeader4Title" style="background: #d6eaf8;">{{ item.title }}</div>
+
+          <div class="mesHeader4Main">
+            <div class="mesHeader4Left">
+              <span @click="setQuickly(item.id,1)">清</span>
+              <span @click="setQuickly(item.id,2)">全</span>
+              <span @click="setQuickly(item.id,3)">小</span>
+              <span @click="setQuickly(item.id,4)">大</span>
+              <span @click="setQuickly(item.id,5)">单</span>
+              <span @click="setQuickly(item.id,6)">双</span>
             </div>
-            <div class="wode" style="width:16.6%">
-              <span>大</span>
-              <span>9.58</span>
-            </div>
-            <div class="wode" style="width:16.6%">
-              <span>小</span>
-              <span>9.58</span>
-            </div>
-            <div class="wode" style="width:16.6%">
-              <span>单</span>
-              <span>9.58</span>
-            </div>
-            <div class="wode" style="width:16.6%">
-              <span>双</span>
-              <span>9.58</span>
-            </div>
-            <div class="wode" style="width:16.6%">
-              <span>清</span>
-              <span>9.58</span>
-            </div>
-            <div
-              class="everylist"
-              v-for="items in item.data"
-              :key="items.id"
-              @click="selectOptions(items.id,items.data,items.odds)"
-            >
+
+            <div class="mesHeader4Right">
               <span
-                :class="['selectedData',selectedData.includes(items.id) ? 'active' : '']"
-              >{{items.data}}</span>
-              <span>{{items.odds}}</span>
+                :class="{'active': selectedMesHeader4.includes(item.id+'1')}"
+                @click="showClass(item.id,'1')"
+              >01</span>
+              <span
+                :class="{'active': selectedMesHeader4.includes(item.id+'2')}"
+                @click="showClass(item.id,'2')"
+              >02</span>
+              <span
+                :class="{'active': selectedMesHeader4.includes(item.id+'3')}"
+                @click="showClass(item.id,'3')"
+              >03</span>
+              <span
+                :class="{'active': selectedMesHeader4.includes(item.id+'4')}"
+                @click="showClass(item.id,'4')"
+              >04</span>
+              <span
+                :class="{'active': selectedMesHeader4.includes(item.id+'5')}"
+                @click="showClass(item.id,'5')"
+              >05</span>
+              <span
+                :class="{'active': selectedMesHeader4.includes(item.id+'6')}"
+                @click="showClass(item.id,'6')"
+              >06</span>
+              <span
+                :class="{'active': selectedMesHeader4.includes(item.id+'7')}"
+                @click="showClass(item.id,'7')"
+              >07</span>
+              <span
+                :class="{'active': selectedMesHeader4.includes(item.id+'8')}"
+                @click="showClass(item.id,'8')"
+              >08</span>
+              <span
+                :class="{'active': selectedMesHeader4.includes(item.id+'9')}"
+                @click="showClass(item.id,'9')"
+              >09</span>
+              <span
+                :class="{'active': selectedMesHeader4.includes(item.id+'10')}"
+                @click="showClass(item.id,'10')"
+              >10</span>
             </div>
           </div>
         </div>
       </mt-tab-container-item>
     </mt-tab-container>
 
-    <footer>
+    <footer v-show="selected=='4'">
+      <div @click="reset4">重置</div>
+      <div style="width: 0"></div>
+      <div style="width: 60%">
+        <span class="ctypeBox">
+          <span :class="['ctype',ctype=='元'?'activectype':'']" @click="setCtype('元')">元</span>
+          <span :class="['ctype',ctype=='角'?'activectype':'']" @click="setCtype('角')">角</span>
+          <span :class="['ctype',ctype=='分'?'activectype':'']" @click="setCtype('分')">分</span>
+        </span>
+        <span class="bzuu">
+          <span @click="amtreduce">-</span>
+          <span>{{amt}}</span>倍
+          <span @click="amtadd">+</span>
+        </span>
+      </div>
+      <div @click="showOrder4">确认</div>
+    </footer>
+
+    <footer v-show="selected!='4'">
       <div @click="reset">重置</div>
       <div @click="showQuickMoney">快捷金额</div>
       <div>
@@ -215,12 +280,62 @@
 </template>
 
 <script>
+import { Indicator } from "mint-ui";
 import axios from "../static/axios.js";
+import qs from "qs";
 import { Toast } from "mint-ui";
 export default {
   name: "homepage",
   data() {
     return {
+      voiceSwitch: false,
+      mh4Data: {},
+      amt: 1,
+      ctype: "元",
+      selectedMesHeader4: [],
+      selectedMesHeader4Obj: [],
+      mesHeader4: [
+        {
+          title: "冠军",
+          id: 0
+        },
+        {
+          title: "亚军",
+          id: 1
+        },
+        {
+          title: "第三名",
+          id: 2
+        },
+        {
+          title: "第四名",
+          id: 3
+        },
+        {
+          title: "第五名",
+          id: 4
+        },
+        {
+          title: "第六名",
+          id: 5
+        },
+        {
+          title: "第七名",
+          id: 6
+        },
+        {
+          title: "第八名",
+          id: 7
+        },
+        {
+          title: "第九名",
+          id: 8
+        },
+        {
+          title: "第十名",
+          id: 9
+        }
+      ],
       animate: "",
       timeSwitch: false,
       qiuuSwitch: false,
@@ -265,7 +380,8 @@ export default {
       mesHeader3: [],
       freeze: [],
       hours: "00",
-      qiuuList: []
+      qiuuList: [],
+      order4Switch: false
     };
   },
   computed: {
@@ -291,10 +407,170 @@ export default {
     }
   },
   methods: {
+    //官方订单页面提交
+    confirm4() {
+      var that = this;
+      var data = {};
+      data.bets = this.selectedMesHeader4Obj;
+      data.amt = this.amt;
+      data.ctype = this.ctype == "元" ? 0 : this.ctype == "角" ? 1 : 0;
+      data.period = this.LastPeriod + 1;
+      axios({
+        url: "/api/pk10/GroupBet",
+        method: "post",
+        data: {
+          prebet: 0,
+          data: data
+        }
+      })
+        .then(function(response) {
+          if (response.Errcode == 0) {
+            Toast("下单成功");
+            that.order4Switch = false;
+          } else {
+            Toast(response.Message);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+          Toast("网络异常，请稍后重试");
+        });
+    },
+    //官方订单页面
+    showOrder4() {
+      this.selectedMesHeader4Obj = [];
+      for (let i = 0; i < 10; i++) {
+        var arr = this.selectedMesHeader4.filter(function(item) {
+          return item.charAt(0) == i;
+        });
+        console.log(arr);
+        if (arr.length != 0) {
+          arr = arr.map(function(item) {
+            return Number(item.substr(1, item.length - 1));
+          });
+          console.log(arr);
+          this.selectedMesHeader4Obj.push({ pos: i, numbers: arr });
+        }
+      }
+      if (this.selectedMesHeader4Obj.length <= 1) {
+        Toast("至少选择两个名次");
+        this.order4Switch = false;
+        return;
+      }
+      Indicator.open();
+      this.getOrder4();
+    },
+    // 获取订单
+    getOrder4() {
+      var that = this;
+      var data = {};
+      data.bets = this.selectedMesHeader4Obj;
+      data.amt = this.amt;
+      data.ctype = this.ctype == "元" ? 0 : this.ctype == "角" ? 1 : 0;
+      data.period = this.LastPeriod + 1;
+      axios({
+        url: "/api/pk10/GroupBet",
+        method: "post",
+        data: {
+          prebet: 1,
+          data: data
+        }
+      })
+        .then(function(response) {
+          if (response.Errcode == 0) {
+            console.log(response);
+            that.order4Switch = true;
+            that.mh4Data = response.Data;
+            Indicator.close();
+          } else {
+            Toast(response.Message);
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+          Toast("网络异常，请稍后重试");
+        });
+    },
+    amtadd() {
+      if (this.amt < 9) {
+        this.amt++;
+      }
+    },
+    amtreduce() {
+      if (this.amt > 1) {
+        this.amt--;
+      }
+    },
+    // 设置setCtype
+    setCtype(type) {
+      this.ctype = type;
+    },
+    // 设置清全大小带双
+    setQuickly(id, data) {
+      switch (data) {
+        case 1:
+          this.selectedMesHeader4 = this.selectedMesHeader4.filter(function(
+            item
+          ) {
+            return item.charAt(0) != id;
+          });
+          break;
+        case 2:
+          for (let i = 1; i < 11; i++) {
+            if (!this.selectedMesHeader4.includes(id + "" + i)) {
+              this.selectedMesHeader4.push(id + "" + i);
+            }
+          }
+          break;
+        case 3:
+          for (let i = 1; i < 6; i++) {
+            if (!this.selectedMesHeader4.includes(id + "" + i)) {
+              this.selectedMesHeader4.push(id + "" + i);
+            }
+          }
+          break;
+        case 4:
+          for (let i = 6; i < 11; i++) {
+            if (!this.selectedMesHeader4.includes(id + "" + i)) {
+              this.selectedMesHeader4.push(id + "" + i);
+            }
+          }
+          break;
+        case 5:
+          for (let i = 1; i < 11; i += 2) {
+            if (!this.selectedMesHeader4.includes(id + "" + i)) {
+              this.selectedMesHeader4.push(id + "" + i);
+            }
+          }
+          break;
+        case 6:
+          for (let i = 2; i < 11; i += 2) {
+            if (!this.selectedMesHeader4.includes(id + "" + i)) {
+              this.selectedMesHeader4.push(id + "" + i);
+            }
+          }
+          break;
+
+        default:
+          break;
+      }
+    },
+    showClass(id, data) {
+      if (this.selectedMesHeader4.includes(id + data)) {
+        this.selectedMesHeader4 = this.selectedMesHeader4.filter(item => {
+          return item != id + data;
+        });
+      } else {
+        this.selectedMesHeader4.push(id + data);
+      }
+    },
     quiuuijm() {
       this.qiuuSwitch = false;
     },
     setVoice() {
+      if(!this.voiceSwitch) {
+        return
+      }
       var audio = document.getElementById("music1");
       console.log(audio);
       if (audio !== null) {
@@ -348,6 +624,10 @@ export default {
     },
 
     // 重置
+    reset4() {
+      this.selectedMesHeader4 = [];
+      this.selectedMesHeader4Obj = [];
+    },
     reset() {
       this.selectedData = [];
       this.selectedObj = [];
@@ -398,6 +678,7 @@ export default {
       } else if (LeftSecond <= 0 && LeftSecond >= -30) {
         that.animate = "";
         that.stopSwitch = true;
+        that.order4Switch = false;
         LeftSecond += 30;
         that.seconds = that.num(LeftSecond);
       } else {
@@ -508,7 +789,8 @@ export default {
         .get("/api/pk10/bet", {
           params: {
             period: that.LastPeriod + 1,
-            data: JSON.stringify(data)
+            data: JSON.stringify(data),
+            bettype: 0
           }
         })
         .then(function(response) {
@@ -584,6 +866,9 @@ export default {
       that.LeftSecond -= 1;
       that.timer();
     }, 1000);
+    setTimeout(function() {
+      that.voiceSwitch = true;
+    },1000)
   }
 };
 </script>
@@ -591,28 +876,107 @@ export default {
 <style lang="scss">
 @import "../static/hot.scss";
 .zl-homepage {
-  .wode {
-    height: px2rem(73);
+  .mint-indicator-mask {
+    z-index: 10;
+  }
+  #order4SwitchMoney {
+    line-height: px2rem(28);
+  }
+  .order4SwitchTitle {
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    padding-top: px2rem(8);
-    span:first-child {
-      display: inline-block;
-      height: 1.8rem;
-      line-height: 1.8rem;
-      width: 1.8rem;
-      color: #000;
-      -webkit-box-shadow: lightgrey 0px 0.08533rem 0.08533rem;
-      box-shadow: lightgrey 0px 0.08533rem 0.08533rem;
-      font-size: 0.93867rem;
-      background-color: white;
-      margin: 0 auto;
+    height: px2rem(40);
+    line-height: px2rem(40);
+    font-size: px2rem(20);
+    border-bottom: px2rem(2) solid #ccc;
+  }
+  .ctypeBox {
+    .activectype {
+      background: #009933;
+      color: #fff;
     }
+    span {
+      border-top: px2rem(1) solid #009933;
+      padding: px2rem(5) px2rem(7);
+      border-bottom: px2rem(1) solid #009933;
+      height: 70%;
+      background: #fff;
+      color: #009933;
+      &:first-child {
+        border-left: px2rem(1) solid #009933;
+      }
+      &:last-child {
+        border-right: px2rem(1) solid #009933;
+      }
+    }
+  }
+  .bzuu {
+    span:first-child,
     span:last-child {
-      margin-top: 0.21333rem;
-      font-size: 0.59733rem;
-      color: #c0392b;
+      border: px2rem(1) solid #009933;
+      background: #fff;
+      padding: px2rem(5) px2rem(7);
+      font-size: px2rem(16);
+      font-weight: 700;
+      color: #000;
+    }
+    span:first-child {
+      margin: 0 px2rem(4);
+      padding: px2rem(5) px2rem(9);
+    }
+    span:nth-child(2) {
+      border: px2rem(1) solid #009933;
+      background: #009933;
+      padding: px2rem(5) px2rem(10);
+      margin: 0 px2rem(3);
+    }
+  }
+  .mesHeader4 {
+    .mesHeader4Title {
+      height: px2rem(30);
+      line-height: px2rem(30);
+      padding-left: px2rem(8);
+    }
+    .mesHeader4Main {
+      height: px2rem(100);
+      display: flex;
+      .mesHeader4Left {
+        width: 20%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        span {
+          background: #26a2ff;
+          width: px2rem(22);
+          height: px2rem(22);
+          margin: 0 px2rem(5);
+          color: #fff;
+          text-align: center;
+          line-height: px2rem(22);
+          font-size: px2rem(12);
+        }
+      }
+      .mesHeader4Right {
+        width: 80%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        span {
+          text-align: center;
+          display: inline-block;
+          height: px2rem(35);
+          line-height: px2rem(35);
+          width: px2rem(35);
+          border-radius: 50%;
+          color: #000;
+          -webkit-box-shadow: lightgrey 0px 0.08533rem 0.08533rem;
+          box-shadow: lightgrey 0px 0.08533rem 0.08533rem;
+          font-size: px2rem(15);
+          background-color: white;
+          margin: 0 px2rem(11);
+        }
+      }
     }
   }
   .qiuu {
@@ -673,6 +1037,13 @@ export default {
     right: px2rem(8);
     font-size: px2rem(10);
   }
+  .iconjingyin:before {
+    position: absolute;
+    top: px2rem(5);
+    right: px2rem(8);
+    font-size: px2rem(10);
+  }
+
 
   .stop {
     position: absolute;

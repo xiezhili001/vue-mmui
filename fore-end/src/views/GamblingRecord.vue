@@ -1,5 +1,29 @@
 <template>
   <div class="zl-gamblingRecord">
+    <div class="order" v-show="order4Switch">
+      <div>
+        <div class="orderHeader">
+          <span>名次</span>
+          <span style="margin-left: 10%">已选车号</span>
+        </div>
+        <div class="orderList">
+          <ul>
+            <li v-for="item in orderData" :key="item.pos">
+              <span>第{{ item.pos+1 }}名</span>
+              <span style="margin-left: 15%; text-align: left">{{ item.numbers.join(',') }}</span>
+            </li>
+          </ul>
+        </div>
+        <div style="text-align: center">
+          <mt-button
+            style="display: block;width: 100%;"
+            type="primary"
+            @click="order4Switch=false"
+          >确定</mt-button>
+        </div>
+      </div>
+    </div>
+
     <mt-header title="投注记录">
       <router-link to="/homepage" slot="left">
         <mt-button icon="back">后退</mt-button>
@@ -28,7 +52,10 @@
           </div>
           <div v-for="item in dataList" :key="item.id">
             <span>{{item.period}}</span>
-            <span>{{item.betid}}</span>
+            <span v-if="typeof(item.betid)=='string'">{{item.betid}}</span>
+            <span v-else>
+              <mt-button type="primary" @click="showDetail(item.betid)">查看</mt-button>
+            </span>
             <span>{{item.odds}}</span>
             <span>{{item.bet}}</span>
             <span v-if="status == 0">
@@ -50,7 +77,10 @@
           </div>
           <div v-for="item in dataList" :key="item.id">
             <span>{{item.period}}</span>
-            <span>{{item.betid}}</span>
+            <span v-if="typeof(item.betid)=='string'">{{item.betid}}</span>
+            <span v-else>
+              <mt-button type="primary" @click="showDetail(item.betid)">查看</mt-button>
+            </span>
             <span>{{item.odds}}</span>
             <span>{{item.bet}}</span>
             <span>{{item.win}}</span>
@@ -70,6 +100,8 @@ export default {
   name: "gamblingRecord",
   data() {
     return {
+      orderData: [],
+      order4Switch: false,
       selected: "1",
       active: "jiesuan",
       status: 0,
@@ -91,31 +123,37 @@ export default {
     }
   },
   methods: {
+    //官方查看详情
+    showDetail(data) {
+      this.orderData = data.bets;
+      this.order4Switch = true;
+      // MessageBox.alert(data.bets, data);
+      // MessageBox.alert('第'+data.bets.pos+'zu'), );
+    },
     cancelOrder(id) {
       MessageBox.confirm("你确认要撤消此单?", "撤单操作").then(action => {
-        if(action == 'confirm') {
+        if (action == "confirm") {
           var that = this;
-      axios
-        .get("/api/pk10/CancelBet", {
-          params: {
-            id: id
-          }
-        })
-        .then(function(response) {
-          console.log(response);
-          if (response.Errcode == 0) {
-            Toast("撤单成功");
-            that.getData();
-          } else {
-            Toast("撤单失败");
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+          axios
+            .get("/api/pk10/CancelBet", {
+              params: {
+                id: id
+              }
+            })
+            .then(function(response) {
+              console.log(response);
+              if (response.Errcode == 0) {
+                Toast("撤单成功");
+                that.getData();
+              } else {
+                Toast("撤单失败");
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
         }
       });
-
     },
     getData(mes, status) {
       var that = this;
@@ -129,9 +167,15 @@ export default {
           }
         })
         .then(function(response) {
-          console.log(response);
           if (response.Errcode == 0) {
-            that.dataList = response.Data;
+            that.dataList = response.Data.map(function(item) {
+              if (item.betid.length > 10) {
+                item.betid = JSON.parse(item.betid);
+              }
+              return item;
+            });
+            console.log(that.dataList);
+
             if (response.Data.length == 0) {
               that.imgSwitch = true;
             } else {
@@ -154,6 +198,61 @@ export default {
 <style lang="scss">
 @import "../static/hot.scss";
 .zl-gamblingRecord {
+  .order {
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & > div {
+      background: #fff;
+      width: 80%;
+      border-radius: px2rem(5);
+
+      .orderconfim {
+        height: px2rem(50);
+        padding: 0 px2rem(40) 0 px2rem(40);
+        button {
+          width: px2rem(70);
+          height: px2rem(30);
+          font-size: px2rem(16);
+        }
+      }
+      .orderMoney {
+        height: px2rem(40);
+        line-height: px2rem(40);
+        padding: 0 px2rem(20) 0 px2rem(20);
+      }
+      .orderHeader {
+        display: flex;
+        text-align: center;
+        border-bottom: 1px solid #ededed;
+        height: px2rem(40);
+        line-height: px2rem(40);
+
+        span {
+          width: 33%;
+        }
+      }
+      .orderList ul {
+        max-height: px2rem(300);
+        overflow-y: scroll;
+        border-bottom: 1px solid #ededed;
+      }
+      .orderList ul li {
+        display: flex;
+        text-align: center;
+        height: px2rem(40);
+        line-height: px2rem(40);
+        span {
+          width: 33%;
+        }
+      }
+    }
+  }
   display: flex;
   flex-direction: column;
   height: 100%;

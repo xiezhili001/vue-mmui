@@ -5,7 +5,7 @@
         <mt-button icon="back">后退</mt-button>
       </router-link>
     </mt-header>
-
+    <component :is="wode"></component>
     <div class="header">
       <span>时间</span>
       <span>笔数</span>
@@ -24,12 +24,17 @@
 </template>
 
 <script>
+import component1 from '../component/zl-header';
 export default {
   name: "twoWeekReport",
   data() {
-    return {};
+    return {
+      wode: 'component1'
+    }
   },
-  methods: {}
+  components: {
+    component1
+  }
 };
 </script>
 <style lang="scss">

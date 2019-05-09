@@ -33,6 +33,11 @@ export default new Router({
       component: () => import("./views/Login.vue")
     },
     {
+      path: "/test",
+      name: "test",
+      component: () => import("./views/test.vue")
+    },
+    {
       path: "/twoWeekReport",
       name: "twoWeekReport",
       component: () => import("./views/TwoWeekReport.vue")
@@ -44,7 +49,7 @@ export default new Router({
     },
     {
       path: '*',
-      redirect: '/homepage'
+      redirect: '/test'
     }
   ]
 });
